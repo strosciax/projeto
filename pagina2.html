@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página 2 - Borracha</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h2 {
+      color: #ff4081;
+      margin-bottom: 15px;
+    }
+    #scratchCanvas {
+      border: 5px dashed #ff4081;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      touch-action: none; /* importante para celular */
+    }
+    #fofinha {
+      font-size: 1.2em;
+      color: #fff;
+      background: #ff4081;
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .button {
+      padding: 15px 30px;
+      background: #ff4081;
+      color: white;
+      font-size: 1.2em;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Apague para revelar 💖</h2>
+  <canvas id="scratchCanvas" width="300" height="300"></canvas>
+  <p id="fofinha">Você é minha melhor amiga, sempre especial 💕</p>
+  
+  <!-- Botão já visível -->
+  <button id="nextBtn" class="button" onclick="window.location.href='pagina3.html'">
+    Ir para próxima página ➡️
+  </button>
+
+  <script>
+    const canvas = document.getElementById('scratchCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Carregar a foto hospedada no GitHub
+    const img = new Image();
+    img.src = 'images/foto.png'; // coloque sua foto na pasta "images" do repositório
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // Cobertura rosa
+      ctx.fillStyle = '#ffb6c1';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+
+    let isDrawing = false;
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+      return {x, y};
+    }
+
+    function start(e) {
+      isDrawing = true;
+      erase(e);
+    }
+
+    function end() {
+      isDrawing = false;
+    }
+
+    function erase(e) {
+      if (!isDrawing) return;
+      const pos = getPos(e);
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 25, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mouseup', end);
+    canvas.addEventListener('mousemove', erase);
+
+    canvas.addEventListener('touchstart', start);
+    canvas.addEventListener('touchend', end);
+    canvas.addEventListener('touchmove', erase);
+  </script>
+
+</body>
+</html>

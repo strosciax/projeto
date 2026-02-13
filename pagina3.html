@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página 3 - Labirinto</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h2 {
+      color: #ff4081;
+      margin-bottom: 15px;
+    }
+    #labirinto {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      margin: 20px auto;
+      background: #fff8f0;
+      border: 5px solid #ff4081;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .parede {
+      position: absolute;
+      background: #ffb6c1;
+      border-radius: 10px;
+    }
+    #chave {
+      position: absolute;
+      width: 45px;
+      height: 45px;
+      background: gold;
+      border: 3px solid #ff4081;
+      border-radius: 50%;
+      line-height: 45px;
+      text-align: center;
+      font-size: 22px;
+      cursor: grab;
+      touch-action: none;
+    }
+    #cadeado {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      background: #ff4081;
+      border-radius: 15px;
+      line-height: 55px;
+      text-align: center;
+      font-size: 26px;
+      color: #fff;
+      font-weight: bold;
+      bottom: 15px;
+      right: 15px;
+    }
+    .button {
+      margin-top: 20px;
+      padding: 15px 30px;
+      background: #ff4081;
+      color: white;
+      font-size: 1.2em;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Leve a chave até o cadeado 🔑➡️🔒</h2>
+  <div id="labirinto">
+    <!-- paredes decorativas -->
+    <div class="parede" style="top:80px; left:0; width:220px; height:20px;"></div>
+    <div class="parede" style="top:160px; left:100px; width:220px; height:20px;"></div>
+    <div class="parede" style="top:240px; left:0; width:220px; height:20px;"></div>
+
+    <!-- chave -->
+    <div id="chave">🔑</div>
+
+    <!-- cadeado -->
+    <div id="cadeado">🔒</div>
+  </div>
+
+  <button id="nextBtn" class="button hidden" onclick="window.location.href='pagina4.html'">
+    Ir para próxima página ✉️
+  </button>
+
+  <script>
+    const chave = document.getElementById('chave');
+    const cadeado = document.getElementById('cadeado');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let offsetX, offsetY, dragging = false;
+
+    function startDrag(e) {
+      dragging = true;
+      const rect = chave.getBoundingClientRect();
+      if (e.touches) {
+        offsetX = e.touches[0].clientX - rect.left;
+        offsetY = e.touches[0].clientY - rect.top;
+      } else {
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+      }
+    }
+
+    function drag(e) {
+      if (!dragging) return;
+      e.preventDefault();
+      const labRect = document.getElementById('labirinto').getBoundingClientRect();
+      let x, y;
+      if (e.touches) {
+        x = e.touches[0].clientX - labRect.left - offsetX;
+        y = e.touches[0].clientY - labRect.top - offsetY;
+      } else {
+        x = e.clientX - labRect.left - offsetX;
+        y = e.clientY - labRect.top - offsetY;
+      }
+      chave.style.left = x + 'px';
+      chave.style.top = y + 'px';
+
+      // checar colisão com cadeado
+      const chaveRect = chave.getBoundingClientRect();
+      const cadeadoRect = cadeado.getBoundingClientRect();
+      if (!(chaveRect.right < cadeadoRect.left ||
+            chaveRect.left > cadeadoRect.right ||
+            chaveRect.bottom < cadeadoRect.top ||
+            chaveRect.top > cadeadoRect.bottom)) {
+        nextBtn.classList.remove('hidden');
+      }
+    }
+
+    function endDrag() {
+      dragging = false;
+    }
+
+    chave.addEventListener('mousedown', startDrag);
+    chave.addEventListener('mousemove', drag);
+    chave.addEventListener('mouseup', endDrag);
+
+    chave.addEventListener('touchstart', startDrag);
+    chave.addEventListener('touchmove', drag);
+    chave.addEventListener('touchend', endDrag);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página 1 - Vinheta</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #ffeef2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh; /* ocupa a tela inteira */
+      text-align: center;
+    }
+    .hearts {
+      font-size: 2em;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+      margin-bottom: 20px;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      margin: 20px;
+      padding: 15px 30px;
+      background: #ff4081;
+      color: white;
+      font-size: 1.2em;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    .cat {
+      margin-left: 10px;
+      animation: dance 1s infinite alternate;
+    }
+    @keyframes dance {
+      from { transform: rotate(-10deg); }
+      to { transform: rotate(10deg); }
+    }
+    p {
+      margin-top: 10px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Vinheta de corações -->
+  <div class="hearts">❤️ ❤️ ❤️ ❤️ ❤️</div>
+
+  <!-- Botão de boas-vindas -->
+  <button class="button" onclick="window.location.href='pagina2.html'">
+    Boas Vindas <span class="cat">🐱</span>
+  </button>
+
+  <!-- Texto abaixo -->
+  <p>Clique acima para começar</p>
+
+</body>
+</html>
