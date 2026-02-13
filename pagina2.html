@@ -24,7 +24,7 @@
       border: 5px dashed #ff4081;
       border-radius: 15px;
       margin-bottom: 15px;
-      touch-action: none; /* importante para celular */
+      touch-action: none; /* impede o scroll durante o toque */
     }
     #fofinha {
       font-size: 1.2em;
@@ -74,22 +74,31 @@
 
     function getPos(e) {
       const rect = canvas.getBoundingClientRect();
-      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+      let x, y;
+      if (e.touches) {
+        x = e.touches[0].clientX - rect.left;
+        y = e.touches[0].clientY - rect.top;
+      } else {
+        x = e.clientX - rect.left;
+        y = e.clientY - rect.top;
+      }
       return {x, y};
     }
 
     function start(e) {
+      e.preventDefault(); // evita scroll
       isDrawing = true;
       erase(e);
     }
 
-    function end() {
+    function end(e) {
+      e.preventDefault();
       isDrawing = false;
     }
 
     function erase(e) {
       if (!isDrawing) return;
+      e.preventDefault(); // evita scroll
       const pos = getPos(e);
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
@@ -97,13 +106,15 @@
       ctx.fill();
     }
 
+    // Eventos para mouse
     canvas.addEventListener('mousedown', start);
     canvas.addEventListener('mouseup', end);
     canvas.addEventListener('mousemove', erase);
 
-    canvas.addEventListener('touchstart', start);
-    canvas.addEventListener('touchend', end);
-    canvas.addEventListener('touchmove', erase);
+    // Eventos para touch (com passive:false)
+    canvas.addEventListener('touchstart', start, {passive:false});
+    canvas.addEventListener('touchend', end, {passive:false});
+    canvas.addEventListener('touchmove', erase, {passive:false});
   </script>
 
 </body>
